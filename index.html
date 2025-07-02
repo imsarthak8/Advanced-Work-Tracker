@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Work Tracker Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a855f7'><path d='M9 11l3 3L22 4M2 12l5 5L2 22h8l8-8-4-4-4 4-2-2z'/></svg>" type="image/svg+xml">
+
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="main-content">
+      <h1>🚀 Work Tracker Dashboard</h1>
+      <div class="date" id="date"></div>
+
+      <div class="input-section">
+        <input type="text" id="taskInput" placeholder="Add a new task..." />
+        <select id="priority">
+          <option value="low">Low Priority</option>
+          <option value="medium">Medium Priority</option>
+          <option value="high">High Priority</option>
+        </select>
+        <input type="text" id="tags" placeholder="#tags (optional)" />
+        <button onclick="addTask()">Add</button>
+      </div>
+
+      <ul id="taskList"></ul>
+
+      <h2>📅 Completed Task History</h2>
+      <div class="search-bar">
+        <input type="date" id="searchDate">
+        <button onclick="filterHistoryByDate()">Search</button>
+        <button onclick="loadHistory()">Reset</button>
+      </div>
+      <div class="history-wrapper" id="historyList"></div>
+
+      <div class="dashboard">
+        <div class="card">
+          <h3>Today’s Tasks</h3>
+          <p id="todayTasks">0</p>
+        </div>
+        <div class="card">
+          <h3>Completed Today</h3>
+          <p id="completedToday">0</p>
+        </div>
+        <div class="card">
+        <h3>Unfinished Today</h3>
+        <p id="unfinishedToday">0</p>
+      </div>
+
+        <div class="card">
+          <h3>Total History</h3>
+          <p id="totalHistory">0</p>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="side-widgets">
+      <div class="widget-box">
+        <h3>📌 Motivational Quote</h3>
+        <p id="quoteText">Loading...</p>
+        <p id="quoteAuthor" style="text-align:right; font-size: 0.9rem; color:#aaa;"></p>
+      </div>
+      <div class="widget-box">
+        <h3>📈 Improvement Tip</h3>
+        <p id="tipText">Stay consistent. Improvement is a marathon, not a sprint.</p>
+      </div>
+      <canvas id="pieChart"></canvas>
+      <div style="margin-top: 20px;">
+  <h2>📊 Today's Progress</h2>
+  <div style="background: #333; border-radius: 10px; overflow: hidden; height: 20px;">
+    <div id="progressBar" style="height: 100%; width: 0%; background: var(--gradient); transition: width 0.4s;"></div>
+  </div>
+  <p id="progressPercent" style="text-align: center; margin-top: 8px;">0% completed</p>
+</div>
+
+<div style="margin-top: 30px;">
+  <h2>🔥 Streak Tracker</h2>
+  <p style="text-align:center; font-size:1.2rem;">Current Streak: <span id="streakCount">0</span> days</p>
+</div>
+
+    </div>
+  </div>
+<div id="dailySummaryModal" style="
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+">
+  <div style="
+    background: #1a1a1a;
+    color: #f5f5f5;
+    border-radius: 16px;
+    padding: 30px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+   
+  ">
+    <h2>🗓️ Yesterday's Summary</h2>
+    <p id="summaryContent">Loading...</p>
+    <button onclick="closeSummaryModal()" style="
+      margin-top: 20px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      background: var(--gradient);
+      border: none;
+      color: white;
+      cursor: pointer;
+    ">Close</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
