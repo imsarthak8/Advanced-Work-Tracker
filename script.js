@@ -172,43 +172,50 @@ function loadHistory() {
   historyList.innerHTML = "";
   let total = 0;
 
-  Object.keys(localStorage).forEach(key => {
-    if (key.startsWith("history-")) {
-      const date = key.replace("history-", "");
-      const tasks = JSON.parse(localStorage.getItem(key));
+  // Sort keys by date (newest first)
+  const sortedKeys = Object.keys(localStorage)
+    .filter(key => key.startsWith("history-"))
+    .sort((a, b) => new Date(b.replace("history-", "")) - new Date(a.replace("history-", "")));
 
-      if (tasks.length) {
-        total += tasks.length;
+  sortedKeys.forEach(key => {
+    const date = key.replace("history-", "");
+    const tasks = JSON.parse(localStorage.getItem(key));
 
-       const card = document.createElement("div");
+    if (tasks.length) {
+      total += tasks.length;
+
+      const card = document.createElement("div");
       card.className = "history-card";
       card.style.cursor = "pointer";
       card.onclick = () => showHistoryGraph(date);
 
+      card.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h4>${formatDate(date)}</h4>
+          <button style="background:transparent;" onclick="event.stopPropagation(); deleteHistoryDay('${date}')" title="Delete Entire History">
+            <i class='bx bx-trash' style="color:#ef4444; font-size:1.2rem;"></i>
+          </button>
+        </div>
+        <ul>
+          ${tasks.map(t => `
+            <li class="historyli">
+              ${t.text}
+              ${t.status === "✅ Completed" 
+                ? "<i class='bx bx-check-circle' style='color:#22c55e'></i>" 
+                : "<i class='bx bx-x-circle' style='color:#ef4444'></i>"
+              }
+            </li>
+          `).join("")}
+        </ul>
+      `;
 
-        card.innerHTML = `
-          <div style="display:flex;  justify-content:space-between; align-items:center;">
-            <h4>${formatDate(date)}</h4>
-            <button style="background:transparent;" onclick="deleteHistoryDay('${date}')" title="Delete Entire History">
-              <i class='bx bx-trash' style="color:#ef4444; font-size:1.2rem;"></i>
-            </button>
-          </div>
-          <ul>
-            ${tasks.map(t => `<li class="historyli">${t.text}
-  ${t.status === "✅ Completed" ? "<i class='bx bx-check-circle' style='color:#22c55e'></i>" : "<i class='bx bx-x-circle' style='color:#ef4444'></i>"}
-  
-</li>
-`).join("")}
-          </ul>
-        `;
-
-        historyList.appendChild(card);
-      }
+      historyList.appendChild(card);
     }
   });
 
   document.getElementById("totalHistory").textContent = total;
 }
+
 function showHistoryGraph(date) {
   const history = JSON.parse(localStorage.getItem(`history-${date}`) || "[]");
 
